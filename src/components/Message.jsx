@@ -72,7 +72,7 @@ const Message = () => {
               className="bg-gradient-to-br from-pale-pink/50 to-lavender/50 p-10 rounded-3xl shadow-xl border-2 border-vibrant-pink/30"
             >
               <p className="font-playfair text-3xl md:text-4xl text-transparent bg-clip-text bg-gradient-to-r from-magenta to-coral font-bold mb-4">
-                Туған күнің құтты болсын, Асем
+                Туған күнің құтты болсын, жаным
               </p>
             </motion.div>
 
