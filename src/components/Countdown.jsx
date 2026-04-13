@@ -1,35 +1,31 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
+/** 2026 жылғы 15 сәуір 00:00 — шолғыштың жергілікті уақыты бойынша (Date айы: 3 = сәуір) */
+const EVENT_END_MS = new Date(2026, 3, 15, 0, 0, 0, 0).getTime();
+
+function calcTimeLeft(targetMs) {
+  const distance = targetMs - Date.now();
+  if (distance <= 0) {
+    return { days: 0, hours: 0, minutes: 0, seconds: 0 };
+  }
+  return {
+    days: Math.floor(distance / (1000 * 60 * 60 * 24)),
+    hours: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+    minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
+    seconds: Math.floor((distance % (1000 * 60)) / 1000),
+  };
+}
+
 const Countdown = () => {
-  const eventDate = new Date('2025-12-08T00:00:00').getTime();
-  
-  const [timeLeft, setTimeLeft] = useState({
-    days: 0,
-    hours: 0,
-    minutes: 0,
-    seconds: 0,
-  });
+  const [timeLeft, setTimeLeft] = useState(() => calcTimeLeft(EVENT_END_MS));
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      const now = new Date().getTime();
-      const distance = eventDate - now;
-
-      if (distance > 0) {
-        setTimeLeft({
-          days: Math.floor(distance / (1000 * 60 * 60 * 24)),
-          hours: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
-          minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
-          seconds: Math.floor((distance % (1000 * 60)) / 1000),
-        });
-      } else {
-        setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
-      }
-    }, 1000);
-
+    const tick = () => setTimeLeft(calcTimeLeft(EVENT_END_MS));
+    tick();
+    const interval = setInterval(tick, 1000);
     return () => clearInterval(interval);
-  }, [eventDate]);
+  }, []);
 
   const timeUnits = [
     { label: 'Күн', value: timeLeft.days },
